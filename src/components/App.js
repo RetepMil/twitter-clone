@@ -1,24 +1,23 @@
 import { useState, useEffect } from "react";
 import AppRouter from "components/Router";
 import { authService } from "fbase";
-import { isCompositeComponent } from "react-dom/test-utils";
 
 function App() {
   const [init, setInit] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userObj, setuserObj] = useState(null);
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
+      if (user) setuserObj(user);
       setInit(true);
     });
   }, []);
   return (
     <>
-      {init ? <AppRouter isLoggedIn={isLoggedIn} /> : "Initializing..."}
+      {init ? (
+        <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} />
+      ) : (
+        "Initializing..."
+      )}
       <footer>&copy; {new Date().getFullYear()} Twitter-clone </footer>
     </>
   );
