@@ -29,11 +29,11 @@ const Jjik = ({ jjikObj, isOwner }) => {
   };
 
   return (
-    <div key={jjikObj.id}>
+    <div key={jjikObj.id} className="nweet">
       {editing ? (
         isOwner && (
           <>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} className="container nweetEdit">
               <input
                 type="text"
                 placeholder="Edit your jjik"
@@ -41,26 +41,25 @@ const Jjik = ({ jjikObj, isOwner }) => {
                 onChange={onChange}
                 required
               />
-              <input type="submit" value="Update Jjik" />
+              <input type="submit" value="Update Jjik" className="formBtn" />
             </form>
-            <button onClick={toggleEditing}>Cancel</button>
+            <button onClick={toggleEditing} className="formBtn cancelBtn">
+              Cancel
+            </button>
           </>
         )
       ) : (
         <>
           <h4>{jjikObj.text}</h4>
           {jjikObj.attachmentUrl && (
-            <img
-              src={jjikObj.attachmentUrl}
-              width="50px"
-              height="50px"
-              alt="no"
-            />
+            <img src={jjikObj.attachmentUrl} alt="no" />
           )}
           {isOwner && (
             <>
-              <button onClick={onDeleteClick}>Delete Jjik</button>
-              <button onClick={toggleEditing}>Edit Jjik</button>
+              <div className="nweet__actions">
+                <button onClick={onDeleteClick}>Delete Jjik</button>
+                <button onClick={toggleEditing}>Edit Jjik</button>
+              </div>
             </>
           )}
         </>

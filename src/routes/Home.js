@@ -7,20 +7,20 @@ const Home = ({ userObj }) => {
   const [jjiks, setjjiks] = useState([]);
 
   useEffect(() => {
-    dbService.collection("jjiks").onSnapshot((snapshot) => {
+    const getData = dbService.collection("jjiks").onSnapshot((snapshot) => {
       const jjikArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setjjiks(jjikArray);
     });
-    setjjiks([]);
+    return () => getData();
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <JjikFactory userObj={userObj} />
-      <div>
+      <div style={{ marginTop: 30 }}>
         {jjiks.map((jjik) => (
           <Jjik
             key={jjik.id}
