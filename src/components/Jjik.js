@@ -1,4 +1,4 @@
-import { dbService } from "fbase";
+import { dbService, storageService } from "fbase";
 import React, { useState } from "react";
 
 const Jjik = ({ jjikObj, isOwner }) => {
@@ -7,7 +7,10 @@ const Jjik = ({ jjikObj, isOwner }) => {
 
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this jjik?");
-    if (ok) await dbService.doc(`jjiks/${jjikObj.id}`).delete();
+    if (ok) {
+      await dbService.doc(`jjiks/${jjikObj.id}`).delete();
+      await storageService.refFromURL(jjikObj.attachmentUrl).delete();
+    }
   };
 
   const toggleEditing = () => setEditing((prev) => !prev);
@@ -46,6 +49,14 @@ const Jjik = ({ jjikObj, isOwner }) => {
       ) : (
         <>
           <h4>{jjikObj.text}</h4>
+          {jjikObj.attachmentUrl && (
+            <img
+              src={jjikObj.attachmentUrl}
+              width="50px"
+              height="50px"
+              alt="no"
+            />
+          )}
           {isOwner && (
             <>
               <button onClick={onDeleteClick}>Delete Jjik</button>

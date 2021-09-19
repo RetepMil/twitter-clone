@@ -1,13 +1,27 @@
-import { authService } from "fbase";
-import React from "react";
+import { authService, dbService } from "fbase";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router";
 
-const Profile = () => {
+const Profile = ({ userObj }) => {
+  const history = useHistory();
+
   const onLogOutClick = () => {
     authService.signOut();
     history.push("/");
   };
-  const history = useHistory();
+
+  const getMyJjiks = async () => {
+    const jjiks = await dbService
+      .collection("jjiks")
+      .where("createrId", "==", userObj.uid)
+      .orderBy("createdAt")
+      .get();
+    console.log(jjiks.docs.map((doc) => doc.data()));
+  };
+
+  useEffect(() => {
+    getMyJjiks();
+  }, []);
   return (
     <>
       <button onClick={onLogOutClick}>Log Out</button>
